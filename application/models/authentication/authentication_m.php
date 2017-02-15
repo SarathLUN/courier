@@ -29,10 +29,4 @@ class Authentication_m extends CI_Model
 		}
     }
 	
-	public function get_group_id($cri)
-	{
-		$q = $this->db->get_where('system_user_01_tbl_users', $cri);
-		$q = $q->row_array();
-		return $q['user_gid'];
-    }
 }

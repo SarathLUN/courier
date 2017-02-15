@@ -47,14 +47,22 @@ class Authentication_c extends CI_Controller
 				if ($this->authentication_m->check_password_correct($cri) != false) {
 					//login correct
 					$user = $this->authentication_m->check_password_correct($cri);
-					//todo->sarath: set session with encrypted data
+					// set session with encrypted data
 					$user_data = array(
 						'uid' => $this->encryption->encrypt($user['user_id'])
 					);
 					$this->session->set_userdata($user_data);
 					
 					//route to each sub system by group
-					$this->route_to_sub_system($user['user_gid']);
+					switch ($user['user_gid']) {
+						case 1:
+							redirect('admin/dashboard_admin_c');
+							break;
+						//todo->sarath: more cases come here to complete all system levels!
+						default:
+							return $msg_body = 'You Don\'t Have Permission To Login.';
+							break;
+					}
 				} else {
 					//incorrect password
 					$msg_body = 'Your password is not correct.<br>Please verify password and try again.';
@@ -73,21 +81,10 @@ class Authentication_c extends CI_Controller
 		redirect('authentication/authentication_c/login_form');
 	}
 	
-	public function route_to_sub_system($gid)
-	{
-		switch ($gid) {
-			case 1:
-				redirect('admin/dashboard_admin_c');
-				break;
-			//todo->sarath: more cases come here to complete all system levels!
-			default:
-				return $msg_body = 'You Don\'t Have Permission To Login.';
-				break;
-		}
-	}
-	
 	public function logout()
 	{
+		$data = array('uid');
+		$this->session->unset_userdata($data);
 		$this->session->sess_destroy();
 		redirect('authentication/authentication_c/login_form','refresh');
 	}

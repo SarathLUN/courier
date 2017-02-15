@@ -13,10 +13,8 @@ class My_library
 	function __construct()
 	{
 		$this->ci =& get_instance();
-		
 		//load model
 		$this->ci->load->model('global_model');
-		$this->ci->load->model('authentication/authentication_m');
 	}
 	
 	public function generateSecureCodeEdit()
@@ -43,8 +41,8 @@ class My_library
 	{
 		// query group id
 		$cri = array('user_id' => $uid);
-		$gid = $this->ci->authentication_m->get_group_id($cri);
-		return $gid;
+		$gid = $this->ci->global_model->get_group_id($cri);
+		return $gid['user_gid'];
 	}
 	
 	public function check_exist($tbl, $cri)
