@@ -117,4 +117,37 @@ class My_library
               	</div></div>';
 		return $msg;
 	}
+	
+	/**system logs**/
+	function do_system_logs($log_action, $log_msg)
+	{
+		$this->ci->load->library('user_agent');
+		$ip = $this->ci->input->ip_address();
+		$userid = $this->ci->session->userdata('user_id');
+		$current = date('Y-m-d H:i:s');
+		
+		$os = strstr($this->ci->agent->platform(), ' ', true);
+		// echo $os;exit;
+		if ($os == 'Windows') {
+			exec("ipconfig /all", $arr, $retval);
+			$macaddress = implode(" ",$arr);
+			
+		} else {
+			exec("ifconfig", $arr, $retval);
+			$macaddress = implode(" ",$arr);
+		}
+		
+		$logs = array(
+			'sys_log_date' => $current,
+			'sys_log_user_id' => $userid,
+			'sys_log_action' => $log_action,
+			'sys_log_msg' => $log_msg,
+			'sys_log_os' => $os,
+			'sys_log_ip' => $ip,
+			'sys_log_mac_address' => $macaddress
+		);
+		
+		$this->ci->global_model->insert_system_logs($logs);
+		
+	}
 }
