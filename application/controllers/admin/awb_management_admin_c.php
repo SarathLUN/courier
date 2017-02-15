@@ -79,7 +79,7 @@ class Awb_management_admin_c extends CI_Controller
 				'awb_pool_is_deleted' => 0
 			);
 			$exist_pre = $this->my_library->check_exist('shipping_01_tbl_awb_number_pool', $cri);
-			if ($exist_pre == 1) {
+			if ($exist_pre == true) {
 				// prefix already existed
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Prefix already existed!</br>Please use another prefix or delete the un-use one.');
 			} else {

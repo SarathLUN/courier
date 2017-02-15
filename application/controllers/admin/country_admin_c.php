@@ -48,7 +48,7 @@ class Country_admin_c extends CI_Controller
 			//check is country already existed
 			$cri1 = array('country_name' => $this->input->post('country_name'));
 			$exist_country = $this->my_library->check_exist('location_01_tbl_country', $cri1);
-			if ($exist_country > 0) {
+			if ($exist_country == true) {
 				// country already existed
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This country already existed');
 			} else {

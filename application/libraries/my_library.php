@@ -17,6 +17,13 @@ class My_library
 		$this->ci->load->model('global_model');
 	}
 	
+	/**
+	 * generate secure editor code and past to 2 directions
+	 * 1. model
+	 * 2. view
+	 * @objective: when user submit edited form we will update only if record id && secured code is matched
+	 * @return string
+	 **/
 	public function generateSecureCodeEdit()
 	{
 		$now = now();
@@ -24,11 +31,11 @@ class My_library
 		return $this->my_encrypt($time);
 	}
 	
-	public function insert_tracking_record($data)
-	{
-		$this->global_model->insert_tracking_record($data);
-	}
-	
+	/**
+	 * encrypte provided data with none decrypt able method
+	 * @data string
+	 * @return string
+	 **/
 	public function my_encrypt($data)
 	{
 		$hash = hash('whirlpool', $data);
@@ -37,6 +44,11 @@ class My_library
 		return $md5;
 	}
 	
+	/**
+	 * get group id of provided user id
+	 * @uid: user id
+	 * @return group id as INT
+	 **/
 	public function get_gid($uid)
 	{
 		// query group id
@@ -45,18 +57,28 @@ class My_library
 		return $gid['user_gid'];
 	}
 	
+	/**
+	 * check exist record in provided table
+	 * @tbl table
+	 * @cri criteria
+	 * @return
+	 **/
 	public function check_exist($tbl, $cri)
 	{
-		$result = $this->ci->global_model->get_exist($tbl, $cri);
-		return $result;
+		if ($this->ci->global_model->get_exist($tbl, $cri)==true){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
-	/**======================
+	/**
 	 * Generate alert box
-	 * $type : string ('success','warning','info','danger')
-	 * $title: string
-	 * $body: string
-	 * =====================**/
+	 * @type : string ('success','warning','info','danger')
+	 * @title: string
+	 * @body: string
+	 * @return : string
+	 **/
 	public function generate_alert($type,$title, $body)
 	{
 		// check type to generate icon
