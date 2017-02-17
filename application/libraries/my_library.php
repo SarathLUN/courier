@@ -65,9 +65,9 @@ class My_library
 	 **/
 	public function check_exist($tbl, $cri)
 	{
-		if ($this->ci->global_model->get_exist($tbl, $cri)==true){
+		if ($this->ci->global_model->get_exist($tbl, $cri) == true) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -79,10 +79,10 @@ class My_library
 	 * @body: string
 	 * @return : string
 	 **/
-	public function generate_alert($type,$title, $body)
+	public function generate_alert($type, $title, $body)
 	{
 		// check type to generate icon
-		switch ($type){
+		switch ($type) {
 			case 'success':
 				$icon = '<i class="icon fa fa-check"></i>';
 				break;
@@ -98,9 +98,9 @@ class My_library
 		}
 		
 		$msg = '<div class="row"><div class="col-sm-4 col-sm-offset-8">
-					<div class="col-sm-12 alert alert-'.$type.' alert-dismissible text-center">
+					<div class="col-sm-12 alert alert-' . $type . ' alert-dismissible text-center">
 		                <div class="col-sm-2">
-		                    '.$icon.'
+		                    ' . $icon . '
 		                </div>
 		                <div class="col-sm-10">
 			                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
@@ -118,36 +118,33 @@ class My_library
 		return $msg;
 	}
 	
-	/**system logs**/
-	function do_system_logs($log_action, $log_msg)
+	/**
+	 * system logs
+	 * @log_action: string
+	 * @log_msg: string
+	 **/
+	public function do_system_logs($log_user, $log_action, $log_msg)
 	{
 		$this->ci->load->library('user_agent');
 		$ip = $this->ci->input->ip_address();
-		$userid = $this->ci->session->userdata('user_id');
 		$current = date('Y-m-d H:i:s');
-		
 		$os = strstr($this->ci->agent->platform(), ' ', true);
-		// echo $os;exit;
-		if ($os == 'Windows') {
-			exec("ipconfig /all", $arr, $retval);
-			$macaddress = implode(" ",$arr);
-			
-		} else {
-			exec("ifconfig", $arr, $retval);
-			$macaddress = implode(" ",$arr);
-		}
-		
 		$logs = array(
 			'sys_log_date' => $current,
-			'sys_log_user_id' => $userid,
+			'sys_log_user' => $log_user,
 			'sys_log_action' => $log_action,
 			'sys_log_msg' => $log_msg,
 			'sys_log_os' => $os,
-			'sys_log_ip' => $ip,
-			'sys_log_mac_address' => $macaddress
+			'sys_log_ip' => $ip
 		);
-		
 		$this->ci->global_model->insert_system_logs($logs);
-		
+	}
+	
+	/**get user info**/
+	public function get_user_info($uid)
+	{
+		$cri = array('user_id'=>$uid);
+		$user_info = $this->ci->global_model->get_user_info($cri);
+		return $user_info;
 	}
 }

@@ -38,4 +38,11 @@ class Global_model extends CI_Model
 		$this->db->insert('system_log_01_tbl_logs', $logs);
 	}
 	
+	/*get user info*/
+	public function get_user_info($cri)
+	{
+		$q = $this->db->get_where('system_user_01_tbl_users', $cri);
+		return $q->row_array();
+	}
+	
 }

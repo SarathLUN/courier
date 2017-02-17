@@ -15,6 +15,8 @@ class Main_c extends CI_Controller
 	
 	public function index()
 	{
+		/*echo exec("ipconfig");
+		exit;*/
 		//check if session exist route it to sub system
 		$uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
 		$gid = $this->my_library->get_gid($uid);
@@ -24,6 +26,4 @@ class Main_c extends CI_Controller
 			redirect('authentication/authentication_c/login_form');
 		}
 	}
-	
-	
 }
