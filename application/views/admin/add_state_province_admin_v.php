@@ -41,7 +41,7 @@
     </div>
     <!-- /.box-body -->
     <div class="box-footer">
-        <input type="submit" class="btn btn-success">
+        <input type="submit" class="btn btn-success" value="Add">
     </div>
     <!-- /.box-footer-->
 </form>
