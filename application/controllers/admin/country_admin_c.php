@@ -97,19 +97,19 @@ class Country_admin_c extends CI_Controller
 	
 	public function form_edit_country($id)
 	{
-		$log_user=$this->uid;
-		$log_action='edit country';
+		$log_user = $this->uid;
+		$log_action = 'edit country';
 		
 		$editCode = $this->my_library->generateSecureCodeEdit();
 		$cri = array('country_id' => $id);
 		$code = array('country_secure_code' => $editCode);
 		$update_code = $this->country_admin_m->update_country($code, $cri);
 		if ($update_code == true) {
-			$log_msg='generate secure code and load form edit country';
+			$log_msg = 'generate secure code and load form edit country ID:'.$id;
 			//get country for view
 			$data['country'] = $this->country_admin_m->get_country_byID($cri);
 		}
-		$this->my_library->do_system_logs($log_user,$log_action,$log_msg);
+		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		//load view
 		$data['page_header'] = 'Edit Country';
 		$data['main_menu'] = $this->main_menu;
@@ -120,48 +120,65 @@ class Country_admin_c extends CI_Controller
 	
 	public function update_country()
 	{
-		$log_user=$this->uid;
-		$log_action='update country';
-		$data = array(
-			'country_name' => $this->input->post('country_name'),
-			'country_iso2_code' => $this->input->post('country_iso2_code'),
-			'country_iso3_code' => $this->input->post('country_iso3_code'),
-			'country_tax' => $this->input->post('country_tax'),
-			'country_currency' => $this->input->post('country_currency'),
-			'country_calling_code' => $this->input->post('country_calling_code')
-		);
-		$cri1 = array(
-			'country_id' => $this->input->post('country_id'),
-			'country_secure_code' => $this->input->post('country_secure_code')
-		);
-		$update = $this->country_admin_m->update_country($data, $cri1);
-		if ($update == true) {
-			$log_msg='country update successful';
-			//data updated
-			$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'Country has been updated successful.');
+		$country_id = $this->encryption->decrypt($this->input->post('country_id'));
+		$log_user = $this->uid;
+		$log_action = 'update country';
+		
+		if ($this->validate_country() == true) {
+			$tbl = 'location_01_tbl_country';
+			$cri = array('country_name' => $this->input->post('country_name'));
+			if ($this->my_library->check_exist($tbl, $cri) == false) {
+				$data = array(
+					'country_name' => $this->input->post('country_name'),
+					'country_iso2_code' => $this->input->post('country_iso2_code'),
+					'country_iso3_code' => $this->input->post('country_iso3_code'),
+					'country_tax' => $this->input->post('country_tax'),
+					'country_currency' => $this->input->post('country_currency'),
+					'country_calling_code' => $this->input->post('country_calling_code')
+				);
+				$cri1 = array(
+					'country_id' => $country_id,
+					'country_secure_code' => $this->input->post('country_secure_code')
+				);
+				$update = $this->country_admin_m->update_country($data, $cri1);
+				if ($update == true) {
+					$log_msg = 'country ID:' . $country_id . ' update successful';
+					//data updated
+					$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'Country has been updated successful.');
+				} else {
+					$log_msg = 'country ID:' . $country_id . ' update fail';
+					$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'No data updated');
+				}
+			} else {
+				//country already exist
+				$log_msg = 'country ID:' . $country_id . ' already existed';
+				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Country already existed');
+			}
 		} else {
-			$log_msg='country update fail';
-			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'No data updated');
+			//validate fail
+			$log_msg = 'Data validation fail.';
+			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data validation fail.');
 		}
-		$this->my_library->do_system_logs($log_user,$log_action,$log_msg);
+		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		$this->session->set_flashdata('msg', $msg);
-		redirect('admin/country_admin_c/edit_country/' . $this->input->post('country_id'));
+		redirect('admin/country_admin_c/form_edit_country/' . $country_id);
 	}
 	
 	public function delete_country($id)
 	{
-		$log_user=$this->uid;
-		$log_action='delete country';
+		$log_user = $this->uid;
+		$log_action = 'delete country';
+		
 		$data = array('is_deleted_country' => 1);
 		$cri = array('country_id' => $id);
 		if ($this->country_admin_m->update_country($data, $cri) == true) {
-			$log_msg='country delete successful';
+			$log_msg = 'country ID:' . $id . ' delete successful';
 			$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'Country has been deleted successful.');
 		} else {
-			$log_msg='country delete fail';
+			$log_msg = 'country ID:' . $id . ' delete fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data processing error!');
 		}
-		$this->my_library->do_system_logs($log_user, $log_action,$log_msg);
+		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		$this->session->set_flashdata('msg', $msg);
 		redirect('admin/country_admin_c/list_country');
 	}

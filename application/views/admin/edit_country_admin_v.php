@@ -46,7 +46,7 @@
     </div>
     <div class="hidden">
         <input type="hidden" name="country_secure_code" value="<?=$country['country_secure_code']?>">
-        <input type="hidden" name="country_id" value="<?=$country['country_id']?>">
+        <input type="hidden" name="country_id" value="<?=$this->encryption->encrypt($country['country_id'])?>">
     </div>
     <!-- /.box-body -->
     <div class="box-footer">

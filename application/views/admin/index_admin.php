@@ -418,6 +418,6 @@
 <script src="<?= base_url('/resources/layout/js/layout.js') ?>"></script>
 <!-- PAGE LEVEL -->
 <!--todo->sarath: page level js come here-->
-<script src="<?=$page_level_js?>" type="text/javascript"></script>
+<script src="<?=@$page_level_js?>" type="text/javascript"></script>
 </body>
 </html>
