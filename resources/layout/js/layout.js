@@ -770,3 +770,11 @@ function _init() {
         });
     };
 }(jQuery));
+
+/**=====================
+ * APPLY PLUG-IN STYLE
+ * ==================**/
+$('document').ready(function(){
+    $('.dataTable').dataTable();
+    $('.select2').select2();
+});

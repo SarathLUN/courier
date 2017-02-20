@@ -178,7 +178,7 @@
                                     <a href="#" class="btn btn-info btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <!--todo->sarath: link to logout-->
+                                    <!--link to logout-->
                                     <a href="<?=base_url('authentication/authentication_c/logout')?>" class="btn btn-danger btn-flat">Sign out</a>
                                 </div>
                             </li>
@@ -195,7 +195,7 @@
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-            <!-- todo->sarath: search form -->
+            <!-- todo->sarath: search menu with AJAX -->
             <!--<div class="sidebar-form">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search Menu ...">
@@ -290,6 +290,77 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="treeview <?=(@$main_menu == 'City/District')?'active':null?>">
+                    <a href="javascript:;">
+                        <i class="fa fa-compass" aria-hidden="true"></i>
+                        <span>City/District</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu <?=(@$main_menu == 'City/District')?'menu-open':null?>"> <!-- required .menu-open-->
+                        <li class="<?=(@$sub_menu == 'Add City/District')?'current':null?>"> <!--required .current-->
+                            <a href="<?=site_url('admin/city_district_admin_c/form_add_city_district')?>">
+                                <i class="fa fa-plus"></i>
+                                <span>Add City/District</span>
+                            </a>
+                        </li>
+                        <li class="<?=(@$sub_menu == 'List City/District')?'current':null?>">
+                            <a href="<?=site_url('admin/city_district_admin_c/list_city_district')?>">
+                                <i class="fa fa-list"></i>
+                                <span>List City/District</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="header">ROUTE MANAGEMENT</li>
+                <li class="treeview <?=(@$main_menu == 'Product Route')?'active':null?>">
+                    <a href="javascript:;">
+                        <i class="fa fa-share" aria-hidden="true"></i>
+                        <span>Product Route</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu <?=(@$main_menu == 'Product Route')?'menu-open':null?>"> <!-- required .menu-open-->
+                        <li class="<?=(@$sub_menu == 'Add Product Route')?'current':null?>"> <!--required .current-->
+                            <a href="#">
+                                <i class="fa fa-plus"></i>
+                                <span>Add Product Route</span>
+                            </a>
+                        </li>
+                        <li class="<?=(@$sub_menu == 'List Product Route')?'current':null?>">
+                            <a href="#">
+                                <i class="fa fa-list"></i>
+                                <span>List Product Route</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview <?=(@$main_menu == 'Service Route')?'active':null?>">
+                    <a href="javascript:;">
+                        <i class="fa fa-share" aria-hidden="true"></i>
+                        <span>Service Route</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu <?=(@$main_menu == 'Service Route')?'menu-open':null?>"> <!-- required .menu-open-->
+                        <li class="<?=(@$sub_menu == 'Add Service Route')?'current':null?>"> <!--required .current-->
+                            <a href="#">
+                                <i class="fa fa-plus"></i>
+                                <span>Add Service Route</span>
+                            </a>
+                        </li>
+                        <li class="<?=(@$sub_menu == 'List Service Route')?'current':null?>">
+                            <a href="#">
+                                <i class="fa fa-list"></i>
+                                <span>List Service Route</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 
             </ul>
             <!-- END sidebar menu -->
@@ -347,6 +418,6 @@
 <script src="<?= base_url('/resources/layout/js/layout.js') ?>"></script>
 <!-- PAGE LEVEL -->
 <!--todo->sarath: page level js come here-->
-<script src="<?=base_url('/resources/custom/js/admin/custom_js_admin.js')?>" type="text/javascript"></script>
+<script src="<?=$page_level_js?>" type="text/javascript"></script>
 </body>
 </html>
