@@ -124,8 +124,8 @@ class City_district_admin_c extends CI_Controller
 	public function form_edit_city($city_id)
 	{
 		$log_user = $this->uid;
-		$log_action = 'edit city or district '.$city_id;
-		$log_msg = 'load form edit city or district';
+		$log_action = 'edit city or district';
+		$log_msg = 'load form edit city or district ID:' . $city_id;
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		//query countries for select
 		$cri = array('city_id' => $city_id);
@@ -146,7 +146,7 @@ class City_district_admin_c extends CI_Controller
 	{
 		$city_id = $this->encryption->decrypt($this->input->post('city_id'));
 		$log_user = $this->uid;
-		$log_action = 'update city or district '.$city_id;
+		$log_action = 'update city or district';
 		if ($this->validate_city_district() == true) {
 			//validate success -> check exist
 			$tbl = 'location_03_tbl_city_district';
@@ -156,7 +156,7 @@ class City_district_admin_c extends CI_Controller
 			);
 			if ($this->my_library->check_exist($tbl, $cri) == true) {
 				// city already exist
-				$log_msg = 'city already exist';
+				$log_msg = 'city or district already exist';
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This City or District already existed');
 			} else {
 				// city not yet exist -> update
@@ -167,11 +167,11 @@ class City_district_admin_c extends CI_Controller
 				$cri2 = array('city_id' => $city_id);
 				if ($this->city_district_admin_m->update_city_district($city, $cri2) == true) {
 					// insert success
-					$log_msg = 'city or district update successful';
+					$log_msg = 'city or district ID:' . $city_id . ' update successful';
 					$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'City or District update successful');
 				} else {
 					// insert fail
-					$log_msg = 'city or district update fail';
+					$log_msg = 'city or district ID:' . $city_id . ' update fail';
 					$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'City or District update successful');
 				}
 			}
@@ -187,17 +187,17 @@ class City_district_admin_c extends CI_Controller
 	
 	public function delete_city($id)
 	{
-		$log_user=$this->uid;
-		$log_action = 'delete city '.$id;
-		$city = array('is_deleted_city'=>1);
-		$cri=array('city_id'=>$id);
+		$log_user = $this->uid;
+		$log_action = 'delete city ' . $id;
+		$city = array('is_deleted_city' => 1);
+		$cri = array('city_id' => $id);
 		if ($this->city_district_admin_m->update_city_district($city, $cri) == true) {
 			// insert success
-			$log_msg = 'city or district delete successful';
+			$log_msg = 'city or district ID:' . $id . ' delete successful';
 			$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'City or District deleted successful');
 		} else {
 			// insert fail
-			$log_msg = 'city or district deleted fail';
+			$log_msg = 'city or district ID:' . $id . ' deleted fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'City or District deleted successful');
 		}
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
