@@ -1,3 +1,7 @@
+<?php
+$uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
+$user = $this->my_library->get_user_info($uid);
+?>
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -140,24 +144,24 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!--todo->sarath: change user image-->
-                            <img src="<?= base_url('/resources/images/user2-160x160.jpg') ?>" class="user-image"
+                            <img src="<?= base_url().$user['user_profile_picture'] ?>" class="user-image"
                                  alt="User Image">
-                            <span class="hidden-xs">Alexander Pierce</span>
+                            <span class="hidden-xs"><?=$user['user_display_name']?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
                                 <!--todo->sarath: change user image-->
-                                <img src="<?= base_url('/resources/images/user2-160x160.jpg') ?>" class="img-circle"
+                                <img src="<?= base_url().$user['user_profile_picture'] ?>" class="img-circle"
                                      alt="User Image">
 
                                 <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2012</small>
+	                                <?=$user['user_display_name']?>
+                                    <small><?=$user['user_position']?></small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
-                            <li class="user-body">
+                            <!--<li class="user-body">
                                 <div class="row">
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Followers</a>
@@ -169,8 +173,8 @@
                                         <a href="#">Friends</a>
                                     </div>
                                 </div>
-                                <!-- /.row -->
-                            </li>
+                                <!-- /.row
+                            </li>-->
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
