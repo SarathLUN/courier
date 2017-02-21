@@ -52,7 +52,7 @@ class State_province_admin_c extends CI_Controller
 		$log_user = $this->uid;
 		$log_action = 'add state or province';
 		if ($this->validate_state_province() == true) {
-			//validate success
+			//validate success -> check exist
 			$cri = array(
 				'state_name' => $this->input->post('state_name'),
 				'state_country_id' => $this->input->post('state_country_id'),

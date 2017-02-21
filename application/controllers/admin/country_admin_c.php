@@ -51,8 +51,11 @@ class Country_admin_c extends CI_Controller
 		$log_user = $this->uid;
 		$log_action = 'add country';
 		if ($this->validate_country() == true) {
-			//check is country already existed
-			$cri1 = array('country_name' => $this->input->post('country_name'));
+			//validate success -> check exist
+			$cri1 = array(
+				'country_name' => $this->input->post('country_name'),
+				'is_deleted_country'=>0
+			);
 			$exist_country = $this->my_library->check_exist('location_01_tbl_country', $cri1);
 			if ($exist_country == true) {
 				$log_msg = 'country already existed';
