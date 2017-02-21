@@ -1,5 +1,5 @@
 <!-- Default box -->
-<form class="box box-success" method="post"
+<form class="box box-warning" method="post"
       action="<?= base_url('admin/city_district_admin_c/update_city_district') ?>">
     <div class="box-header with-border">
         <h3 class="box-title">Edit City/District</h3>

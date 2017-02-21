@@ -1,6 +1,6 @@
 <?= @$this->session->flashdata('msg') ?>
 
-<div class="panel panel-default">
+<div class="panel panel-warning">
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">

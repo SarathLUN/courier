@@ -1,5 +1,5 @@
 <!-- Default box -->
-<form class="box box-success" method="post" action="<?=base_url('admin/country_admin_c/update_country')?>">
+<form class="box box-warning" method="post" action="<?=base_url('admin/country_admin_c/update_country')?>">
     <div class="box-header with-border">
         <h3 class="box-title"><?=$country['country_name']?></h3>
 
