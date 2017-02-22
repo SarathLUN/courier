@@ -53,35 +53,35 @@ class State_province_admin_c extends CI_Controller
 		$log_action = 'add state or province';
 		if ($this->validate_state_province() == true) {
 			//validate success -> check exist
+			$tbl = 'location_02_tbl_state_province';
 			$cri = array(
 				'state_name' => $this->input->post('state_name'),
 				'state_country_id' => $this->input->post('state_country_id'),
 				'is_deleted_state' => 0
 			);
-			$tbl = 'location_02_tbl_state_province';
 			if ($this->my_library->check_exist($tbl, $cri) == true) {
+				// state already exist -> exit
 				$log_msg = 'state or province already existed';
-				// state already exist
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This State or Province already existed!');
 			} else {
-				// state not exist can process to add
+				// state not exist -> add
 				$data = array(
 					'state_name' => $this->input->post('state_name'),
 					'state_country_id' => $this->input->post('state_country_id')
 				);
 				if ($this->state_province_admin_m->insert_state_province($data) == true) {
-					$log_msg = 'state or province insert successful';
 					// state insert success
+					$log_msg = 'state or province insert successful';
 					$msg = $this->my_library->generate_alert('success', 'SUCCESS !', 'State or Province insert successful!');
 				} else {
-					$log_msg = 'data fail to insert';
 					// state insert fail
+					$log_msg = 'data fail to insert';
 					$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data insert fail');
 				}
 			}
 		} else {
+			//validate fail -> exit
 			$log_msg = 'data validation fail';
-			//validate fail
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data validation fail');
 		}
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
@@ -109,12 +109,19 @@ class State_province_admin_c extends CI_Controller
 	{
 		$log_user = $this->uid;
 		$log_action = 'edit state or province';
-		$log_msg = 'load form edit state';
-		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
+		
 		//query countries for select
-		$cri = array('state_id' => $id);
-		$data['state'] = $this->state_province_admin_m->get_state_byID($cri);
 		$data['countries'] = $this->state_province_admin_m->get_all_country();
+		//generate secure code
+		$code = $this->my_library->generateSecureCodeEdit();
+		$state = array('state_secure_code'=>$code);
+		$cri = array('state_id' => $id);
+		if ($this->state_province_admin_m->update_state_province($state,$cri)==true) {
+			// secure code updated -> query state to view
+			$log_msg = 'load form edit state or province ID:'.$id;
+			$data['state'] = $this->state_province_admin_m->get_state_byID($cri);
+		}
+		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		//load view
 		$data['page_header'] = "State/Province";
 		$data['main_menu'] = $this->main_menu;
@@ -129,7 +136,7 @@ class State_province_admin_c extends CI_Controller
 		$log_action = 'edit state or province';
 		$state_id = $this->encryption->decrypt($this->input->post('state_id'));
 		if ($this->validate_state_province() == true) {
-			//validate success
+			//validate success -> check exist
 			$cri = array(
 				'state_name' => $this->input->post('state_name'),
 				'state_country_id' => $this->input->post('state_country_id'),
@@ -137,31 +144,32 @@ class State_province_admin_c extends CI_Controller
 			);
 			$tbl = 'location_02_tbl_state_province';
 			if ($this->my_library->check_exist($tbl, $cri) == true) {
+				// state already exist -> exit
 				$log_msg = 'state or province already existed';
-				// state already exist
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This State or Province already existed!');
 			} else {
-				// state not exist can process to add
+				// state not exist -> update
 				$data = array(
 					'state_name' => $this->input->post('state_name'),
 					'state_country_id' => $this->input->post('state_country_id')
 				);
 				$cri1 = array(
-					'state_id' => $state_id
+					'state_id' => $state_id,
+					'state_secure_code'=> $this->input->post('state_secure_code')
 				);
 				if ($this->state_province_admin_m->update_state_province($data, $cri1) == true) {
-					$log_msg = 'state or province update successful';
-					// state insert success
+					// state update success
+					$log_msg = 'state or province ID:'.$state_id.' update successful';
 					$msg = $this->my_library->generate_alert('success', 'SUCCESS !', 'State or Province update successful!');
 				} else {
-					$log_msg = 'data fail to update';
-					// state insert fail
+					// state update fail
+					$log_msg = 'state or province ID:'.$state_id.' update fail';
 					$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data update fail');
 				}
 			}
 		} else {
-			$log_msg = 'data validation fail';
-			//validate fail
+			//validate fail -> exit
+			$log_msg = 'data validation fail state or province ID:'.$state_id;
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data validation fail');
 		}
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
@@ -176,12 +184,12 @@ class State_province_admin_c extends CI_Controller
 		$data = array('is_deleted_state'=>1);
 		$cri = array('state_id'=>$id);
 		if ($this->state_province_admin_m->update_state_province($data, $cri) == true) {
-			$log_msg = 'state or province deleted successful';
-			// state insert success
+			// state update success
+			$log_msg = 'state or province ID:'.$id.' deleted successful';
 			$msg = $this->my_library->generate_alert('success', 'SUCCESS !', 'State or Province deleted successful!');
 		} else {
-			$log_msg = 'data fail to delete';
-			// state insert fail
+			// state update fail
+			$log_msg = 'state or province ID:'.$id.' deleted fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'State or Province delete fail');
 		}
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);

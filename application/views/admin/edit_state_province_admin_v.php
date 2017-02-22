@@ -40,6 +40,7 @@
         
         <div class="hidden">
             <input type="hidden" name="state_id" value="<?=$this->encryption->encrypt($state['state_id'])?>">
+            <input type="hidden" name="state_secure_code" value="<?=$state['state_secure_code']?>">
         </div>
     </div>
     <!-- /.box-body -->

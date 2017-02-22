@@ -28,6 +28,7 @@ class Country_admin_c extends CI_Controller
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		//load view
 		$data['page_header'] = 'Country';
+		$data['page_header_small'] = 'add a country...';
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'Add Country';
 		$data['page'] = 'admin/add_country_admin_v';
@@ -58,19 +59,19 @@ class Country_admin_c extends CI_Controller
 			);
 			$exist_country = $this->my_library->check_exist('location_01_tbl_country', $cri1);
 			if ($exist_country == true) {
-				$log_msg = 'country already existed';
 				// country already existed
+				$log_msg = 'country already existed';
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This country already existed');
 			} else {
-				//insert data
+				// country not yet exist -> can insert data
 				$data = $this->input->post();
 				if ($this->country_admin_m->insert_country($data) == true) {
-					$log_msg = 'country add successful';
 					//data inserted
+					$log_msg = 'country add successful';
 					$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'Country has been added successful.');
 				} else {
-					$log_msg = 'country add fail';
 					//data error to insert
+					$log_msg = 'country add fail';
 					$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data insert error!');
 				}
 			}
@@ -108,8 +109,8 @@ class Country_admin_c extends CI_Controller
 		$code = array('country_secure_code' => $editCode);
 		$update_code = $this->country_admin_m->update_country($code, $cri);
 		if ($update_code == true) {
-			$log_msg = 'generate secure code and load form edit country ID:'.$id;
 			//get country for view
+			$log_msg = 'generate secure code and load form edit country ID:'.$id;
 			$data['country'] = $this->country_admin_m->get_country_byID($cri);
 		}
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
@@ -123,14 +124,18 @@ class Country_admin_c extends CI_Controller
 	
 	public function update_country()
 	{
+		//decrypt id
 		$country_id = $this->encryption->decrypt($this->input->post('country_id'));
+		//system log
 		$log_user = $this->uid;
 		$log_action = 'update country';
 		
 		if ($this->validate_country() == true) {
+			//validation success -> check exist
 			$tbl = 'location_01_tbl_country';
 			$cri = array('country_name' => $this->input->post('country_name'));
 			if ($this->my_library->check_exist($tbl, $cri) == false) {
+				// not exist -> update
 				$data = array(
 					'country_name' => $this->input->post('country_name'),
 					'country_iso2_code' => $this->input->post('country_iso2_code'),
@@ -145,10 +150,11 @@ class Country_admin_c extends CI_Controller
 				);
 				$update = $this->country_admin_m->update_country($data, $cri1);
 				if ($update == true) {
-					$log_msg = 'country ID:' . $country_id . ' update successful';
 					//data updated
+					$log_msg = 'country ID:' . $country_id . ' update successful';
 					$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL !', 'Country has been updated successful.');
 				} else {
+					//data update fail
 					$log_msg = 'country ID:' . $country_id . ' update fail';
 					$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'No data updated');
 				}

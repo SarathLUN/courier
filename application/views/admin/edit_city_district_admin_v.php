@@ -58,6 +58,7 @@
         </div>
         <div class="hidden">
             <input type="hidden" name="city_id" value="<?= $this->encryption->encrypt($city['city_id']) ?>">
+            <input type="hidden" name="city_secure_code" value="<?=$city['city_secure_code']?>">
         </div>
     </div>
     <!-- /.box-body -->

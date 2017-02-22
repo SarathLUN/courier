@@ -76,7 +76,7 @@ class City_district_admin_c extends CI_Controller
 				'city_name' => $this->input->post('city_name')
 			);
 			if ($this->my_library->check_exist($tbl, $cri) == true) {
-				// city already exist
+				// city already exist -> exit
 				$log_msg = 'city already exist';
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This City or District already existed');
 			} else {
@@ -128,11 +128,19 @@ class City_district_admin_c extends CI_Controller
 		$log_msg = 'load form edit city or district ID:' . $city_id;
 		$this->my_library->do_system_logs($log_user, $log_action, $log_msg);
 		//query countries for select
-		$cri = array('city_id' => $city_id);
-		$data['city'] = $this->city_district_admin_m->get_city($cri);
-		$cri2 = array('state_country_id' => $data['city']['state_country_id']);
-		$data['states'] = $this->city_district_admin_m->get_state_byCountry($cri2);
 		$data['countries'] = $this->city_district_admin_m->get_all_country();
+		//generate secure code
+		$code = $this->my_library->generateSecureCodeEdit();
+		//update secure code
+		$city = array('city_secure_code'=>$code);
+		$cri = array('city_id' => $city_id);
+		if ($this->city_district_admin_m->update_city_district($city,$cri)==true) {
+			//get city
+			$data['city'] = $this->city_district_admin_m->get_city($cri);
+			//get state for selected country
+			$cri2 = array('state_country_id' => $data['city']['state_country_id']);
+			$data['states'] = $this->city_district_admin_m->get_state_byCountry($cri2);
+		}
 		//load view
 		$data['page_header'] = "City/District";
 		$data['main_menu'] = $this->main_menu;
@@ -140,11 +148,13 @@ class City_district_admin_c extends CI_Controller
 		$data['page_level_js'] = base_url('/resources/pages/js/admin/city_district_admin.js');
 		$data['page'] = 'admin/edit_city_district_admin_v';
 		$this->load->view('admin/index_admin', $data);
-	}
+	} 
 	
 	public function update_city_district()
 	{
+		//decrypt id
 		$city_id = $this->encryption->decrypt($this->input->post('city_id'));
+		//system log
 		$log_user = $this->uid;
 		$log_action = 'update city or district';
 		if ($this->validate_city_district() == true) {
@@ -155,8 +165,8 @@ class City_district_admin_c extends CI_Controller
 				'city_name' => $this->input->post('city_name')
 			);
 			if ($this->my_library->check_exist($tbl, $cri) == true) {
-				// city already exist
-				$log_msg = 'city or district already exist';
+				// city already exist -> exit
+				$log_msg = 'city or district ID:'.$city_id.' already exist';
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'This City or District already existed');
 			} else {
 				// city not yet exist -> update
@@ -164,7 +174,10 @@ class City_district_admin_c extends CI_Controller
 					'city_state_id' => $this->input->post('city_state_id'),
 					'city_name' => $this->input->post('city_name')
 				);
-				$cri2 = array('city_id' => $city_id);
+				$cri2 = array(
+					'city_id' => $city_id,
+					'city_secure_code'=>$this->input->post('city_secure_code')
+				);
 				if ($this->city_district_admin_m->update_city_district($city, $cri2) == true) {
 					// insert success
 					$log_msg = 'city or district ID:' . $city_id . ' update successful';
@@ -176,7 +189,7 @@ class City_district_admin_c extends CI_Controller
 				}
 			}
 		} else {
-			//validate fail
+			//validate fail -> exit
 			$log_msg = 'data validation fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data validation fail');
 		}
@@ -188,7 +201,7 @@ class City_district_admin_c extends CI_Controller
 	public function delete_city($id)
 	{
 		$log_user = $this->uid;
-		$log_action = 'delete city ' . $id;
+		$log_action = 'delete city';
 		$city = array('is_deleted_city' => 1);
 		$cri = array('city_id' => $id);
 		if ($this->city_district_admin_m->update_city_district($city, $cri) == true) {
