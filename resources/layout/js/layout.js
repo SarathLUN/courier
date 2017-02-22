@@ -777,4 +777,11 @@ function _init() {
 $('document').ready(function(){
     $('.dataTable').dataTable();
     $('.select2').select2();
+    /*apply list.js to menu search function*/
+    var options = {
+        valueNames: [ 'menu-name']
+    };
+
+    var menuLeft = new List('left-menu', options);
 });
+

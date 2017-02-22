@@ -1,5 +1,5 @@
 <?php
-$uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
+$uid = $this->encryption->decrypt($this->session->userdata('uid'));
 $user = $this->my_library->get_user_info($uid);
 ?>
 <!DOCTYPE html>
@@ -67,8 +67,7 @@ $user = $this->my_library->get_user_info($uid);
                                     <li><!-- start message -->
                                         <a href="#">
                                             <div class="pull-left">
-                                                <!--todo->sarath: change user image-->
-                                                <img src="<?= base_url('/resources/images/user2-160x160.jpg') ?>"
+                                                <img src="<?= base_url().$user['user_profile_picture'] ?>"
                                                      class="img-circle"
                                                      alt="User Image">
                                             </div>
@@ -143,7 +142,6 @@ $user = $this->my_library->get_user_info($uid);
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <!--todo->sarath: change user image-->
                             <img src="<?= base_url().$user['user_profile_picture'] ?>" class="user-image"
                                  alt="User Image">
                             <span class="hidden-xs"><?=$user['user_display_name']?></span>
@@ -151,7 +149,6 @@ $user = $this->my_library->get_user_info($uid);
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <!--todo->sarath: change user image-->
                                 <img src="<?= base_url().$user['user_profile_picture'] ?>" class="img-circle"
                                      alt="User Image">
 
@@ -196,35 +193,35 @@ $user = $this->my_library->get_user_info($uid);
     <!-- =============================================== -->
 
     <!-- Left side column. contains the sidebar -->
-    <aside class="main-sidebar">
+    <aside class="main-sidebar" id="left-menu">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- todo->sarath: search menu with AJAX -->
-            <!--<div class="sidebar-form">
+            <div class="sidebar-form">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search Menu ...">
+                    <input type="text" class="form-control search" placeholder="Search Menu ...">
                     <span class="input-group-btn">
-                        <button id="search-btn" class="btn btn-flat">
+                        <button id="search-btn" class="btn btn-cycle btn-info">
                             <i class="fa fa-search"></i>
                         </button>
                     </span>
                 </div>
-            </div>-->
+            </div>
             <!-- /.search form -->
             <!-- sidebar menu -->
-            <ul class="sidebar-menu">
+            <ul class="sidebar-menu list">
                 <li class="header">HOME</li>
                 <li class="<?=(@$sub_menu == 'Dashboard')?'current':null?>">
                     <a href="<?=site_url('/admin/dashboard_admin_c')?>">
                         <i class="fa fa-home"></i>
-                        <span>Dashboard</span>
+                        <span class="menu-name">Dashboard</span>
                     </a>
                 </li>
                 <li class="header">AWB MANAGEMENT</li>
                 <li class="treeview <?=(@$main_menu == 'AWB Management')?'active':null?>"> <!--required .active-->
                     <a href="javascript:;">
                         <i class="fa fa-barcode"></i>
-                        <span>AWB Number</span>
+                        <span  class="menu-name">AWB Number</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -240,17 +237,16 @@ $user = $this->my_library->get_user_info($uid);
                         <li class="<?=(@$sub_menu == 'AWB Pool')?'current':null?>">
                             <a href="<?=site_url('admin/awb_management_admin_c/list_awb_pool_number')?>">
                                 <i class="fa fa-plus"></i>
-                                <span>AWB Pool</span>
+                                <span class="name">AWB Pool</span>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <!--more menu come here-->
                 <li class="header">LOCATION MANAGEMENT</li>
                 <li class="treeview <?=(@$main_menu == 'Country')?'active':null?>">
                     <a href="javascript:;">
                         <i class="fa fa-flag"></i>
-                        <span>Country</span>
+                        <span class="menu-name">Country</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -274,7 +270,7 @@ $user = $this->my_library->get_user_info($uid);
                 <li class="treeview <?=(@$main_menu == 'State/Province')?'active':null?>">
                     <a href="javascript:;">
                         <i class="fa fa-location-arrow" aria-hidden="true"></i>
-                        <span>State/Province</span>
+                        <span class="menu-name">State/Province</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -298,7 +294,7 @@ $user = $this->my_library->get_user_info($uid);
                 <li class="treeview <?=(@$main_menu == 'City/District')?'active':null?>">
                     <a href="javascript:;">
                         <i class="fa fa-compass" aria-hidden="true"></i>
-                        <span>City/District</span>
+                        <span class="menu-name">City/District</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -322,7 +318,7 @@ $user = $this->my_library->get_user_info($uid);
                 <li class="treeview <?=(@$main_menu == 'Product Route')?'active':null?>">
                     <a href="javascript:;">
                         <i class="fa fa-share" aria-hidden="true"></i>
-                        <span>Product Route</span>
+                        <span class="menu-name">Product Route</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -345,7 +341,7 @@ $user = $this->my_library->get_user_info($uid);
                 <li class="treeview <?=(@$main_menu == 'Service Route')?'active':null?>">
                     <a href="javascript:;">
                         <i class="fa fa-share" aria-hidden="true"></i>
-                        <span>Service Route</span>
+                        <span class="menu-name">Service Route</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -418,10 +414,12 @@ $user = $this->my_library->get_user_info($uid);
 <script src="<?=base_url('/resources/vendor/DataTables-1.10.13/js/dataTables.bootstrap.min.js')?>" type="text/javascript"></script>
 <!-- Load Select2-->
 <script src="<?=base_url('/resources/vendor/select2-4.0.3/js/select2.full.min.js')?>" type="text/javascript"></script>
+<!--load List.js-->
+<script src="<?=base_url('/resources/vendor/list_js/list.min.js')?>" type="text/javascript"></script>
 <!-- LAYOUT LEVEL todo->sarath: need to apply ajax search of menu -->
 <script src="<?= base_url('/resources/layout/js/layout.js') ?>"></script>
 <!-- PAGE LEVEL -->
-<!--todo->sarath: page level js come here-->
 <script src="<?=@$page_level_js?>" type="text/javascript"></script>
+
 </body>
 </html>
