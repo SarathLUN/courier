@@ -14,8 +14,7 @@ class State_province_admin_c extends CI_Controller
 		// check session and store decrypted user id
 		$this->uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
 		//check if session not exist redirect to login
-		$gid = $this->my_library->get_gid($this->uid);
-		if ($gid != 1) {
+		if ($this->uid != 1) {
 			redirect('authentication/authentication_c/login_form');
 		}
 	}
@@ -32,7 +31,7 @@ class State_province_admin_c extends CI_Controller
 		$data['page_header'] = "State/Province";
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'Add State/Province';
-		$data['page'] = 'admin/add_state_province_admin_v';
+		$data['page'] = 'admin/state_province_add_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -101,7 +100,7 @@ class State_province_admin_c extends CI_Controller
 		$data['page_header'] = "State/Province";
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'List State/Province';
-		$data['page'] = 'admin/list_state_province_admin_v';
+		$data['page'] = 'admin/state_province_list_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -126,7 +125,7 @@ class State_province_admin_c extends CI_Controller
 		$data['page_header'] = "State/Province";
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'List State/Province';
-		$data['page'] = 'admin/edit_state_province_admin_v';
+		$data['page'] = 'admin/state_province_edit_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	

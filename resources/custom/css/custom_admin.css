@@ -1,0 +1,17 @@
+.skin-red .sidebar-menu > li.header {
+    color: #777;
+    background: #222d32;
+}
+
+.skin-red .treeview-menu > li.active > a, .skin-red .treeview-menu > li > a:hover {
+    color: greenyellow;
+}
+
+i.required {
+    color: red;
+    margin-left: 5px;
+}
+
+.checkbox-inline, .radio-inline {
+    padding-left: 0px;
+}

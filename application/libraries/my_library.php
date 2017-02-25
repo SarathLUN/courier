@@ -143,6 +143,7 @@ class My_library
 	/**get user info**/
 	public function get_user_info($uid)
 	{
+		$uid = $this->ci->encryption->decrypt($uid);
 		$cri = array('user_id'=>$uid);
 		$user_info = $this->ci->global_model->get_user_info($cri);
 		return $user_info;

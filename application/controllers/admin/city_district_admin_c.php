@@ -5,7 +5,7 @@ class City_district_admin_c extends CI_Controller
 {
 	public $uid;
 	public $main_menu = 'City/District';
-	
+	public $page_js;
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,10 +14,11 @@ class City_district_admin_c extends CI_Controller
 		// check session and store decrypted user id
 		$this->uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
 		//check if session not exist redirect to login
-		$gid = $this->my_library->get_gid($this->uid);
-		if ($gid != 1) {
+		if ($this->uid != 1) {
 			redirect('authentication/authentication_c/login_form');
 		}
+		// global constant
+		$this->page_js=base_url('/resources/pages/admin/js');
 	}
 	
 	public function form_add_city_district()
@@ -32,8 +33,8 @@ class City_district_admin_c extends CI_Controller
 		$data['page_header'] = "City/District";
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'Add City/District';
-		$data['page_level_js'] = base_url('/resources/pages/js/admin/city_district_admin.js');
-		$data['page'] = 'admin/add_city_district_admin_v';
+		$data['page_level_js'] = $this->page_js;
+		$data['page'] = 'admin/city_district_add_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -117,7 +118,7 @@ class City_district_admin_c extends CI_Controller
 		$data['page_header'] = "City/District";
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'List City/District';
-		$data['page'] = 'admin/list_city_district_admin_v';
+		$data['page'] = 'admin/city_district_list_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -145,8 +146,8 @@ class City_district_admin_c extends CI_Controller
 		$data['page_header'] = "City/District";
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'List City/District';
-		$data['page_level_js'] = base_url('/resources/pages/js/admin/city_district_admin.js');
-		$data['page'] = 'admin/edit_city_district_admin_v';
+		$data['page_level_js'] = $this->page_js;
+		$data['page'] = 'admin/city_district_edit_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	} 
 	

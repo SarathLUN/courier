@@ -14,8 +14,7 @@ class Country_admin_c extends CI_Controller
 		// check session and store decrypted user id
 		$this->uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
 		//check if session not exist redirect to login
-		$gid = $this->my_library->get_gid($this->uid);
-		if ($gid != 1) {
+		if ($this->uid != 1) {
 			redirect('authentication/authentication_c/login_form');
 		}
 	}
@@ -31,7 +30,7 @@ class Country_admin_c extends CI_Controller
 		$data['page_header_small'] = 'add a country...';
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'Add Country';
-		$data['page'] = 'admin/add_country_admin_v';
+		$data['page'] = 'admin/country_add_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -95,7 +94,7 @@ class Country_admin_c extends CI_Controller
 		$data['page_header'] = 'Country List';
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'List Country';
-		$data['page'] = 'admin/list_country_admin_v';
+		$data['page'] = 'admin/country_list_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -118,7 +117,7 @@ class Country_admin_c extends CI_Controller
 		$data['page_header'] = 'Edit Country';
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'List Country';
-		$data['page'] = 'admin/edit_country_admin_v';
+		$data['page'] = 'admin/country_edit_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	

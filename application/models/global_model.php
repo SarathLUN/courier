@@ -41,7 +41,10 @@ class Global_model extends CI_Model
 	/*get user info*/
 	public function get_user_info($cri)
 	{
-		$q = $this->db->get_where('system_user_01_tbl_users', $cri);
+		$this->db->select('user_display_name,user_position,user_email,user_profile_picture');
+		$this->db->from('system_user_01_tbl_users');
+		$this->db->where($cri);
+		$q = $this->db->get();
 		return $q->row_array();
 	}
 	

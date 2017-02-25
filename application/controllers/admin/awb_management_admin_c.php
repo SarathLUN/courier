@@ -19,9 +19,7 @@ class Awb_management_admin_c extends CI_Controller
 		$this->load->model('admin/awb_management_admin_m');
 		// check session and store decrypted user id
 		$this->uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
-		//check if session not exist redirect to login
-		$gid = $this->my_library->get_gid($this->uid);
-		if ($gid != 1) {
+		if ($this->uid != 1) {
 			redirect('authentication/authentication_c/login_form');
 		}
 		
@@ -44,7 +42,7 @@ class Awb_management_admin_c extends CI_Controller
 		$data['page_header_small'] = 'list AWB Number...';
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'AWB Number';
-		$data['page'] = 'admin/list_awb_number_admin_v';
+		$data['page'] = 'admin/awb_number_list_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -65,7 +63,7 @@ class Awb_management_admin_c extends CI_Controller
 		$data['page_header_small'] = 'list, add AWB Number by Pool...';
 		$data['main_menu'] = $this->main_menu;
 		$data['sub_menu'] = 'AWB Pool';
-		$data['page'] = 'admin/list_awb_pool_number_admin_v';
+		$data['page'] = 'admin/awb_pool_number_list_admin_v';
 		$this->load->view('admin/index_admin', $data);
 	}
 	
@@ -87,7 +85,7 @@ class Awb_management_admin_c extends CI_Controller
 	{
 		$log_user = $this->uid;
 		$log_action = 'add awb number';
-		if ($this->validate_awb_pool()==true) {
+		if ($this->validate_awb_pool() == true) {
 			// validate success -> check exist prefix
 			$cri = array(
 				'awb_pool_prefix' => $this->input->post('awb_pool_prefix'),
@@ -168,21 +166,21 @@ class Awb_management_admin_c extends CI_Controller
 		$log_user = $this->uid;
 		$log_action = 'disable awb pool';
 		// if pool is disabled successful then disable awb
-		if ($this->awb_management_admin_m->update_pool($data1, $cri1) == true) {
-			if ($this->awb_management_admin_m->update_awb($data2, $cri2) == true) {
-				$log_msg = 'AWB Pool ID:'.$pool_id.' has been disabled';
+		if ($this->awb_management_admin_m->update_awb($data2, $cri2) == true) {
+			if ($this->awb_management_admin_m->update_pool($data1, $cri1) == true) {
+				$log_msg = 'AWB Pool ID:' . $pool_id . ' has been disabled';
 				$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL', 'AWB Pool has been disabled!');
 				$this->session->set_flashdata('msg', $msg);
 			} else {
-				$log_msg = 'awb disable successful, but pool ID:'.$pool_id.' error to disable.';
-				$data3 = array('awb_pool_is_enabled' => 0);
-				$this->awb_management_admin_m->update_pool($data3, $cri1);
+				$log_msg = 'awb disable successful, but pool ID:' . $pool_id . ' error to disable. so role back.';
+				$data3 = array('awb_number_is_enabled' => 1);
+				$this->awb_management_admin_m->update_awb($data3, $cri2);
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data 
             processing fail, please try again.');
 				$this->session->set_flashdata('msg', $msg);
 			}
 		} else {
-			$log_msg = 'awb and pool ID:'.$pool_id.' disable fail';
+			$log_msg = 'awb and pool ID:' . $pool_id . ' disable fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data 
             processing fail, please try again.');
 			$this->session->set_flashdata('msg', $msg);
@@ -211,21 +209,21 @@ class Awb_management_admin_c extends CI_Controller
 		$log_user = $this->uid;
 		$log_action = 'enable awb pool';
 		// if awb is disabled successful then disable awb pool
-		if ($this->awb_management_admin_m->update_awb($data1, $cri1) == true) {
-			if ($this->awb_management_admin_m->update_pool($data2, $cri2) == true) {
-				$log_msg = 'awb and pool ID:'.$pool_id.' enable successful';
+		if ($this->awb_management_admin_m->update_awb($data2, $cri2) == true) {
+			if ($this->awb_management_admin_m->update_pool($data1, $cri1) == true) {
+				$log_msg = 'awb and pool ID:' . $pool_id . ' enable successful';
 				$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL', 'AWB Pool has been enabled!');
 				$this->session->set_flashdata('msg', $msg);
 			} else {
-				$log_msg = 'awb enable successful, but pool ID:'.$pool_id.' fail to enable.';
-				$data3 = array('awb_pool_is_enabled' => 1);
-				$this->awb_management_admin_m->update_pool($data3, $cri1);
+				$log_msg = 'awb enable successful, but pool ID:' . $pool_id . ' fail to enable. so role back.';
+				$data3 = array('awb_number_is_enabled' => 0);
+				$this->awb_management_admin_m->update_awb($data3, $cri2);
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data 
             processing fail, please try again.');
 				$this->session->set_flashdata('msg', $msg);
 			}
 		} else {
-			$log_msg = 'awb and pool ID:'.$pool_id.' enable fail';
+			$log_msg = 'awb and pool ID:' . $pool_id . ' enable fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data 
             processing fail, please try again.');
 			$this->session->set_flashdata('msg', $msg);
@@ -249,26 +247,26 @@ class Awb_management_admin_c extends CI_Controller
 		);
 		
 		$data2 = array(
-			'awb_number_is_enabled' => 0
+			'awb_number_is_deleted' => 1
 		);
 		$log_user = $this->uid;
 		$log_action = 'delete awb pool';
 		// if awb is delete successful then delete awb pool
-		if ($this->awb_management_admin_m->update_awb($data1, $cri1) == true) {
-			if ($this->awb_management_admin_m->update_pool($data2, $cri2) == true) {
-				$log_msg = 'awb pool ID:'.$pool_id.' deleted successful';
+		if ($this->awb_management_admin_m->update_awb($data2, $cri2) == true) {
+			if ($this->awb_management_admin_m->update_pool($data1, $cri1) == true) {
+				$log_msg = 'awb pool ID:' . $pool_id . ' deleted successful';
 				$msg = $this->my_library->generate_alert('success', 'SUCCESSFUL', 'AWB Pool has been deleted!');
 				$this->session->set_flashdata('msg', $msg);
 			} else {
-				$log_msg = 'awb deleted successful, but pool ID:'.$pool_id.' delete fail';
-				$data3 = array('awb_pool_is_enabled' => 1);
-				$this->awb_management_admin_m->update_pool($data3, $cri1);
+				$log_msg = 'awb deleted successful, but pool ID:' . $pool_id . ' delete fail. so role back.';
+				$data3 = array('awb_number_is_deleted' => 0);
+				$this->awb_management_admin_m->update_awb($data3, $cri2);
 				$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data 
             processing fail, please try again.');
 				$this->session->set_flashdata('msg', $msg);
 			}
 		} else {
-			$log_msg = 'awb and pool ID:'.$pool_id.' delete fail';
+			$log_msg = 'awb and pool ID:' . $pool_id . ' delete fail';
 			$msg = $this->my_library->generate_alert('danger', 'ERROR !', 'Data 
             processing fail, please try again.');
 			$this->session->set_flashdata('msg', $msg);

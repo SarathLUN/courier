@@ -12,8 +12,7 @@ class Dashboard_admin_c extends CI_Controller
         // check session and store decrypted user id
 	    $this->uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
 	    //check if session not exist redirect to login
-	    $gid = $this->my_library->get_gid($this->uid);
-	    if ($gid != 1){
+	    if ($this->uid != 1){
 	    	redirect('authentication/authentication_c/login_form');
 	    }
     }
