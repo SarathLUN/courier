@@ -15,3 +15,19 @@ i.required {
 .checkbox-inline, .radio-inline {
     padding-left: 0px;
 }
+.well-success{
+    background-color: rgba(0, 166, 90, 0.1) !important;
+    border: 1px solid #cbfde6 !important;
+}
+.well-danger{
+    background-color: rgba(221, 75, 57, 0.1)!important;
+    border: 1px solid #f7c1c1 !important;
+}
+.well-warning{
+    background-color: rgba(243, 156, 18, 0.1)!important;
+    border: 1px solid #f9e5c1 !important;
+}
+.well-info{
+    background-color: rgba(0, 192, 239, 0.1)!important;
+    border: 1px solid rgb(196, 232, 241) !important;
+}

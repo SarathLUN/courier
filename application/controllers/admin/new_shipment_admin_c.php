@@ -10,7 +10,7 @@ class New_shipment_admin_c extends CI_Controller
 	{
 		parent::__construct();
 		//load model
-	    $this->load->model('admin/new_shipment_admin_m');
+		$this->load->model('admin/new_shipment_admin_m');
 		// check session and store decrypted user id
 		$this->uid = $this->encryption->decrypt(@$this->session->userdata('uid'));
 		//check if session not exist redirect to login
@@ -19,23 +19,7 @@ class New_shipment_admin_c extends CI_Controller
 		}
 	}
 	
-	public function form_add_domestic_shipment()
-	{
-		$data['countries'] = $this->new_shipment_admin_m->get_all_country();
-		$data['product_types'] = $this->new_shipment_admin_m->get_all_product_type();
-		//page level css/js
-		$data['page_level_css'] = base_url('/resources/pages/admin/css/domestic_shipment_add_admin.css');
-		$data['page_level_js']=base_url('/resources/pages/admin/js/domestic_shipment_add_admin.js');
-		//load view
-		$data['page_header'] = "Domestic Shipment";
-		$data['page_header_small'] = "book a domestic shipment for customer...";
-		$data['main_menu'] = $this->main_menu;
-		$data['sub_menu'] = 'Add Domestic';
-		$data['page'] = 'admin/domestic_shipment_add_admin_v';
-		$this->load->view('admin/index_admin', $data);
-	}
-	
-	public function get_states_byCountry()
+	public function ajax_get_states_byCountry()
 	{
 		$country = $this->input->post('domestic_country'); //get data from AJAX
 		$cri1 = array(
@@ -59,7 +43,7 @@ class New_shipment_admin_c extends CI_Controller
 		echo json_encode($data);
 	}
 	
-	public function get_service_byRoute()
+	public function ajax_get_service_byRoute()
 	{
 		$from_state = $this->input->post('from_state');
 		$to_state = $this->input->post('to_state');
@@ -71,70 +55,114 @@ class New_shipment_admin_c extends CI_Controller
 		$services = $this->new_shipment_admin_m->get_service_byRoute($cri1);
 		//prepare output for service drop list
 		$service = "<option value=''>Select Available Service for this Route</option>";
-		foreach ($services as $row){
-			if ($row->service_route_origin_state == $from_state && $row->service_route_consignee_state == $to_state && $row->service_router_is_denied == 1){
+		foreach ($services as $row) {
+			if ($row->service_route_origin_state == $from_state && $row->service_route_consignee_state == $to_state && $row->service_router_is_denied == 1) {
 				// this route has been denied
 				$service .= '';
-			}else{
+			} else {
 				// all other service is allow
 				$service .= "<option value='" . $row->service_id . "'>" . $row->service_name . "</option>";
 			}
 		}
-		
 		$data = array(
 			'service' => $service
 		);
 		echo json_encode($data);
 	}
 	
-	public function get_sender_email_byState()
+	public function ajax_get_email_city_byState()
 	{
-		$from_state = $this->input->post('from_state');
-		// get sender email for drop list
-		$cri1 = array('customer_state_id'=>$from_state);
-		$senders = $this->new_shipment_admin_m->get_email_byState($cri1);
+		$state = $this->input->post('state');
+		// get receiver email for drop list
+		$cri1 = array(
+			'customer_state_id' => $state,
+			'customer_is_deleted' => 0
+		);
+		$cids = $this->new_shipment_admin_m->get_cid_byState($cri1);
 		//prepare output for sender email drop list
-		$sender = '<option value="">select Customer\'s E-mail Address</option>';
-		foreach ($senders as $row){
-			$sender .= "<option value='" . $row->user_id . "'>" . $row->user_email . "</option>";
-		}
-		//get city
-		$cri2 = array('city_state_id'=>$from_state);
-		$cities = $this->new_shipment_admin_m->get_city_byState($cri2);
-		//prepare output for sender city drop list
-		$city = "<option value=''>Select City</option>";
-		foreach ($cities as $row){
-			$city .= "<option value='".$row->city_id."'>".$row->city_name."</option>";
+		$cid = '<option value="">Select Customer ID</option>';
+		foreach ($cids as $row) {
+			$cid .= "<option value='" . $this->encryption->encrypt($row->user_id) . "'>" . $row->customer_id . "</option>";
 		}
 		$data = array(
-			'sender_mail'=>$sender,
-			'sender_city'=>$city
+			'cid' => $cid,
 		);
 		echo json_encode($data);
 	}
-	public function get_receiver_email_byState()
+	
+	public function ajax_get_user_info()
 	{
-		$to_state = $this->input->post('to_state');
-		// get receiver email for drop list
-		$cri1 = array('customer_state_id'=>$to_state);
-		$receivers = $this->new_shipment_admin_m->get_email_byState($cri1);
-		//prepare output for sender email drop list
-		$receiver = '<option value="">select Customer\'s E-mail Address</option>';
-		foreach ($receivers as $row){
-			$receiver .= "<option value='" . $row->user_id . "'>" . $row->user_email . "</option>";
-		}
-		//get city
-		$cri2 = array('city_state_id'=>$to_state);
-		$cities = $this->new_shipment_admin_m->get_city_byState($cri2);
-		//prepare output for sender city drop list
-		$city = "<option value=''>Select City</option>";
-		foreach ($cities as $row){
-			$city .= "<option value='".$row->city_id."'>".$row->city_name."</option>";
-		}
+		$uid = $this->encryption->decrypt($this->input->post('uid'));
+		$cri1 = array('user_id' => $uid);
+		$u_info = $this->new_shipment_admin_m->get_user_info($cri1);
+		print_r($u_info);
+		exit;
 		$data = array(
-			'receiver_mail'=>$receiver,
-			'receiver_city'=>$city
+			'first_name' => $u_info['user_first_name'],
+			'last_name' => $u_info['user_last_name'],
+			'company_name' => $u_info['customer_company_name'],
+			'city' => $city,
+			'zip_post_code' => $u_info['customer_zip_post_code'],
+			'address' => $u_info['customer_address'],
+			'email' => $u_info['user_email'],
+			'phone_number' => $u_info['customer_phone_number'],
+			'federal_tax_type' => $ftt,
+			'federal_tax_number' => $u_info['customer_federal_tax_number'],
+			'ie_rg' => $u_info['customer_ie_rg'],
+			'vat_gst' => $u_info['customer_vat_gst']
 		);
 		echo json_encode($data);
+	}
+	
+	public function form_add_domestic_shipment()
+	{
+		$data['countries'] = $this->new_shipment_admin_m->get_all_country();
+		$data['product_types'] = $this->new_shipment_admin_m->get_all_product_type();
+		$data['export_types'] = $this->new_shipment_admin_m->get_all_export_type();
+		$data['tax_types'] = $this->new_shipment_admin_m->get_federal_tax_type();
+		//page level css/js
+		$data['page_level_css'] = base_url('/resources/pages/admin/css/domestic_shipment_add_admin.css');
+		$data['page_level_js'] = base_url('/resources/pages/admin/js/domestic_shipment_add_admin.js');
+		//load view
+		$data['page_header'] = "Domestic Shipment";
+		$data['page_header_small'] = "book a domestic shipment for customer...";
+		$data['main_menu'] = $this->main_menu;
+		$data['sub_menu'] = 'Add Domestic';
+		$data['page'] = 'admin/domestic_shipment_add_admin_v';
+		$this->load->view('admin/index_admin', $data);
+	}
+	
+	public function add_domestic_shipment()
+	{
+		$data = $this->input->post();
+		echo "<pre>";
+		print_r($data);
+		echo "</pre>";
+		
+		//get AWB Number
+		$awb = $this->new_shipment_admin_m->get_available_awb();
+		//get sender id
+		if ($this->input->post('search_domestic_sender') && $this->input->post('search_domestic_receiver')){
+			//get id from view
+			
+		}else{
+			//return msg
+		}
+		print_r($awb);
+		exit;
+		//prepare data for shipment
+		$shipment = array(
+			'shipment_awb_number'=>$awb,
+			'shipment_sender_id'=>$sender_id,
+			'shipment_product_id'=>$product_id,
+			'shipment_service_id'=>$this->input->post('available_service'),
+			'shipment_receiver_id'=>$receiver_id,
+			'shipment_payment_id'=>$payment_id,
+			'shipment_status_id'=>1,
+			'shipment_type_of_export_id' => $this->input->post('shipment_type_of_export_id'),
+			'shipment_available_pickup_time' => $this->input->post('shipment_available_pickup_time'),
+			'shipment_description' => $this->input->post('shipment_description'),
+			
+		);
 	}
 }

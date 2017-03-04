@@ -377,7 +377,7 @@ desired effect
                             </a>
                         </li>
                         <li class="<?=(@$sub_menu == 'Add International Shipment')?'active':null?>"> <!--required .active-->
-                            <a href="<?=site_url('admin/new_shipment_admin_c/form_add_new_international_shipment')?>">
+                            <a href="<?=site_url('admin/new_shipment_admin_c/form_add_international_shipment')?>">
                                 <i class="fa fa-globe" aria-hidden="true"></i>
                                 <span>Add International</span>
                             </a>
@@ -556,7 +556,7 @@ desired effect
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
-<!-- jQuery 2.2.3 -->
+<!-- jQuery 3.1.1 -->
 <script src="<?=base_url('/resources/plugins/jQuery/jquery-3.1.1.min.js')?>" type="text/javascript"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="<?=base_url('/resources/bootstrap/js/bootstrap.min.js')?>" type="text/javascript"></script>

@@ -23,7 +23,11 @@ class Awb_management_admin_m extends CI_Model
 	==============**/
     public function get_all_awb_number()
     {
-    	$cri = array('awb_number_is_enabled'=>1);
+    	$cri = array(
+		    'awb_number_is_enabled' => 1,
+		    'awb_number_is_available' => 1,
+		    'awb_number_is_deleted'=>0
+	    );
         $this->db->select('*');
         $this->db->from('shipping_02_tbl_awb_number n');
         $this->db->join('shipping_01_tbl_awb_number_pool p','n.awb_number_pool_id= p.awb_pool_id ');

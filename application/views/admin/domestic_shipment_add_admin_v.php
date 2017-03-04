@@ -1,5 +1,5 @@
 <?= @$this->session->flashdata('msg') ?>
-<form action="<?= base_url('admin/shipping_management_admin_c/add_domestic_shipment') ?>" method="post"
+<form action="<?= base_url('admin/new_shipment_admin_c/add_domestic_shipment') ?>" method="post"
       class="box box-solid box-warning">
     <div class="box-header with-border">
         <h3 class="box-title"> Form : Add Domestic Shipment </h3>
@@ -115,104 +115,87 @@
                             <div class="well text-center">
                                 <div class="form-group">
                                     <label>
-                                        You can auto fill Customer information by selected email<br>
-                                        Or Manual Fill in below form
+                                        Please select Customer ID and verify information below<br>
+                                        If not found, please click <a href="#" target="_blank">here</a> to manage customer.
                                     </label>
                                     <select id="search_domestic_sender" name="search_domestic_sender"
                                             class="form-control select2">
-                                        <option value="">select Customer's E-mail Address</option>
+                                        <option value="">Select Customer ID</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Contact Person<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="sender_name"
-                                       placeholder="Full Name" id="sender_name"
-                                       required>
+                                <label for="">Contact Person</label>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="sender_firs_name" disabled>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="sender_last_name" disabled>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Company<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="sender_company_name"
-                                       id="sender_company_name"
-                                       placeholder="Company Name" required>
+                                <label for="">Company</label>
+                                <input type="text" class="form-control" id="sender_company_name" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">City<i class="required">*</i></label>
-                                <select name="sender_city_id" id="sender_city_id"
-                                        class="form-control select2"
-                                        required>
-                                    <option value="">Select City</option>
-                                </select>
+                                <label for="">City</label>
+                                <input id="sender_city_id" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Zip/Post Code</label>
-                                <input type="text" class="form-control" name="sender_zip_post_code"
-                                       id="sender_zip_post_code"
-                                       placeholder="Zip/Post Code">
+                                <input type="text" class="form-control" id="sender_zip_post_code" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Address<i class="required">*</i></label>
-                                <textarea class="form-control" name="sender_address" id="sender_address"
-                                          rows="3"
-                                          required></textarea>
+                                <label for="">Address</label>
+                                <textarea class="form-control" id="sender_address" rows="3" disabled></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">E-mail<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="sender_email" id="sender_email"
-                                       placeholder="john@company.com" required>
+                                <label for="">E-mail</label>
+                                <input type="text" class="form-control" id="sender_email" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Phone<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="sender_phone_number"
-                                       id="sender_phone_number"
-                                       placeholder="+855-23-000-000" required>
+                                <label for="">Phone</label>
+                                <input type="text" class="form-control" id="sender_phone_number" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Federal Tax Type</label>
-                                <select name="sender_federal_tax_type_id" class="form-control select2">
-                                    <option value="">Select Type of Tax</option>
-									<?php
-									foreach ($tax_types as $tax_type) {
-										?>
-                                        <option value="<?= $tax_type->federal_tax_type_id ?>"><?= $tax_type->federal_tax_type_name ?></option>
-										<?php
-									}//end foreach for $tax_types
-									?>
-                                </select>
+                                <input type="text"  class="form-control" id="sender_federal_tax_type_id" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Federal Tax Number</label>
-                                <input type="text" class="form-control" name="sender_federal_tax_number">
+                                <input type="text" class="form-control" id="sender_federal_tax_number" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">IE/RG</label>
-                                <input type="text" class="form-control" name="sender_ie_rg">
+                                <input type="text" class="form-control" id="sender_ie_rg" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Shipper VAT/GST Number</label>
-                                <input type="text" class="form-control" name="sender_vat_gst">
+                                <input type="text" class="form-control" id="sender_vat_gst" disabled>
                             </div>
                         </div>
                     </div>
@@ -229,103 +212,86 @@
                             <div class="well text-center">
                                 <div class="form-group">
                                     <label>
-                                        You can auto fill Customer information by selected email<br>
-                                        Or Manual Fill in below form
+                                        Please select Customer ID and verify information below<br>
+                                        If not found, please click <a href="#" target="_blank">here</a> to manage customer.
                                     </label>
-                                    <select id="search_domestic_receiver" class="form-control select2">
-                                        <option value="">select Customer's E-mail Address</option>
+                                    <select id="search_domestic_receiver" name="search_domestic_receiver" class="form-control select2">
+                                        <option value="">Select Customer ID</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Contact Person<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="receiver_name" id="receiver_name"
-                                       placeholder="Full Name" required>
+                                <label for="">Contact Person</label>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="receiver_firs_name" disabled>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="receiver_last_name" disabled>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Company<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="receiver_company_name"
-                                       id="receiver_company_name"
-                                       placeholder="Company Name" required>
+                                <label for="">Company</label>
+                                <input type="text" class="form-control" id="receiver_company_name" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">City<i class="required">*</i></label>
-                                <select name="receiver_city_id" id="receiver_city_id"
-                                        class="form-control select2"
-                                        required>
-                                    <option value="">Select City</option>
-                                </select>
+                                <label for="">City</label>
+                                <input type="text" id="receiver_city_id" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Zip/Post Code</label>
-                                <input type="text" class="form-control" name="receiver_zip_post_code"
-                                       id="receiver_zip_post_code"
-                                       placeholder="Zip/Post Code">
+                                <input type="text" class="form-control" id="receiver_zip_post_code" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Address<i class="required">*</i></label>
-                                <textarea class="form-control" name="receiver_address" id="receiver_address"
-                                          rows="3"
-                                          required></textarea>
+                                <label for="">Address</label>
+                                <textarea class="form-control" id="receiver_address" rows="3" disabled></textarea>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">E-mail<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="receiver_email"
-                                       id="receiver_email"
-                                       placeholder="john@company.com" required>
+                                <label for="">E-mail</label>
+                                <input type="text" class="form-control" id="receiver_email" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="">Phone<i class="required">*</i></label>
-                                <input type="text" class="form-control" name="receiver_phone_number"
-                                       id="receiver_phone_number"
-                                       placeholder="+855-23-000-000" required>
+                                <label for="">Phone</label>
+                                <input type="text" class="form-control" id="receiver_phone_number" required>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Federal Tax Type</label>
-                                <select name="receiver_federal_tax_type_id" class="form-control select2">
-                                    <option value="">Select Type of Tax</option>
-									<?php
-									foreach ($tax_types as $tax_type) {
-										?>
-                                        <option value="<?= $tax_type->federal_tax_type_id ?>"><?= $tax_type->federal_tax_type_name ?></option>
-										<?php
-									}//end foreach for $tax_types
-									?>
-                                </select>
+                                <input type="text" class="form-control" id="receiver_federal_tax_type_name" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Federal Tax Number</label>
-                                <input type="text" class="form-control" name="receiver_federal_tax_number">
+                                <input type="text" class="form-control" id="receiver_federal_tax_number" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">IE/RG</label>
-                                <input type="text" class="form-control" name="receiver_ie_rg">
+                                <input type="text" class="form-control" id="receiver_ie_rg" disabled>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label for="">Shipper VAT/GST Number</label>
-                                <input type="text" class="form-control" name="receiver_vat_gst">
+                                <input type="text" class="form-control" id="receiver_vat_gst" disabled>
                             </div>
                         </div>
                     </div>
@@ -352,75 +318,33 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="">Bill To:<i class="required">*</i></label> <br>
-                    <label class="radio-inline">
-                        <input type="radio" name="shipment_bill_to" value="0" class="minimal" required> Sender
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="shipment_bill_to" value="1" class="minimal"> Receiver
-                    </label>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="">Pay at:<i class="required">*</i></label> <br>
-                    <label class="radio-inline">
-                        <input class="minimal" type="radio" name="shipment_pay_at" value="0" required> Pick Up
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" class="minimal" name="shipment_pay_at" value="1"> Delivered
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <label for="">Type of Export</label>
                     <select name="shipment_type_of_export_id" class="form-control select2">
                         <option value="">Select Type of Export</option>
+				        <?php
+				        foreach ($export_types as $row){
+					        echo '<option value="'.$row->type_of_export_id.'">';
+					        echo $row->type_of_export_name;
+					        echo '</option>';
+				        }
+				        ?>
                     </select>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">Payment Detail</h1>
-                    </div>
-                    <div class="panel-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <div class="col-sm-5 text-right">Total Weight(Kg)</div>
-                                <div class="col-sm-2 text-center">=</div>
-                                <div class="col-sm-5" id="weight_lb">N/A</div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="col-sm-5 text-right">Unit Price($)</div>
-                                <div class="col-sm-2 text-center">=</div>
-                                <div class="col-sm-5" id="unit_price_lb">N/A</div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="col-sm-5 text-right">Delivery Charge ($)</div>
-                                <div class="col-sm-2 text-center">=</div>
-                                <div class="col-sm-5" id="sub_total">N/A</div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="col-sm-5 text-right">(<span id="tax_lb"></span>%) Services Tax ($)
-                                </div>
-                                <div class="col-sm-2 text-center">=</div>
-                                <div class="col-sm-5" id="tax_price">N/A</div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="col-sm-5 text-right">Total Charge ($)</div>
-                                <div class="col-sm-2 text-center">=</div>
-                                <div class="col-sm-5" id="total">N/A</div>
-                            </li>
-                        </ul>
+                <div class="well well-success well-sm text-center">
+                    <div class="form-group">
+                        <label for="">Bill To:<i class="required">*</i></label> <br>
+                        <label class="radio-inline">
+                            <input type="radio" name="shipment_bill_to" value="0" class="minimal" required> Sender
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="shipment_bill_to" value="1" class="minimal"> Receiver
+                        </label>
                     </div>
                 </div>
             </div>
